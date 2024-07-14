@@ -76,11 +76,18 @@ class PengembalianController extends Controller
         return redirect()->route('dashboard.pengembalian.index')->with('success','Berhasil Di Kembalikan');
     }
 
+
+
     public function konfirmasi($id)
     {
-        $peminjaman = Pengembalian::find($id);
-        $peminjaman->status = 'Dikonfirmasi';
-        $peminjaman->update();
+        $pengembalian = Pengembalian::find($id);
+        if($pengembalian->status == 'Dikembalikan'){
+            $pengembalian->status = 'Konfirmasi';
+
+        }else{
+            $pengembalian->status = 'Dikembalikan';
+        }
+        $pengembalian->update();
         return redirect()->route('dashboard.pengembalian.index')->with('success','Berhasil Di Konfirmasi');
     }
 }

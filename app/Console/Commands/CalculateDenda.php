@@ -30,15 +30,15 @@ class CalculateDenda extends Command
      public function handle()
      {
          $overduePeminjamans = Peminjaman::whereDate('tgl_kembali', '<', Carbon::now())
+             ->where('status', 'konfirmasi')
              ->whereNull('denda')
              ->get();
 
          foreach ($overduePeminjamans as $peminjaman) {
              $tgl_kembali = Carbon::parse($peminjaman->tgl_kembali);
              $lama_terlambat = $tgl_kembali->diffInDays(Carbon::now());
-
-             // Example: Calculate denda based on business logic (e.g., fixed rate per day)
-             $dendaAmount = $lama_terlambat * 1000;
+            // Example: Calculate denda based on business logic (e.g., fixed rate per day)
+            $dendaAmount = ceil($lama_terlambat / 1000) * 1000; // Round up to the nearest 1000 days
 
             // Store denda record in the 'dendas' table
             Denda::create([

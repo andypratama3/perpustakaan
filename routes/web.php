@@ -25,14 +25,14 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
     Route::resource('peminjaman', PeminjamanController::class, ['names' => 'dashboard.peminjaman']);
     Route::get('/peminjamans/detailBuku/', [PeminjamanController::class, 'detailBuku'])->name('peminjaman.detailBuku');
     Route::get('/peminjamans/searchBuku/', [PeminjamanController::class, 'searchBuku'])->name('dashboard.peminjaman.searchBuku');
-    Route::post('/peminjamans/konfirmasi/{id}', [PeminjamanController::class, 'konfirmasi'])->name('dashboard.peminjaman.konfirmasi');
+    Route::get('/peminjamans/konfirmasi/{id}', [PeminjamanController::class, 'konfirmasi'])->name('dashboard.peminjaman.konfirmasi');
 
 
     //denda
     Route::resource('denda', DendaController::class, ['names' => 'dashboard.denda']);
     Route::resource('pengembalian', PengembalianController::class, ['names' => 'dashboard.pengembalian']);
     Route::get('/pengembalians/kembalikan/{id}', [PengembalianController::class, 'pengembalian'])->name('dashboard.pengembalian.pengembalian');
-    Route::get('/peminjamans/konfirmasi/{id}', [PengembalianController::class, 'konfirmasi'])->name('dashboard.pengembalian.konfirmasi');
+    Route::get('/pengembalians/konfirmasi/{id}', [PengembalianController::class, 'konfirmasi'])->name('dashboard.pengembalian.konfirmasi');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

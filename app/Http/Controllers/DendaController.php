@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Denda;
+use App\Models\Member;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class DendaController extends Controller
             } else {
                 $member_id = Member::where('user_id', Auth::user()->id)->first()->id;
                 $peminjaman = Peminjaman::where('members_id', $member_id)->first()->id;
-                $query = $query->where('peminjamans_id', $peminjaman->id);
+                $query = $query->where('peminjamans_id', $peminjaman);
             }
         }
 

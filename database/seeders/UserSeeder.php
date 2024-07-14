@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Member;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
@@ -27,7 +28,7 @@ class UserSeeder extends Seeder
 
         $user = \App\Models\User::create($userData);
 
-        $member = \App\Models\Member::create(array_merge($memberData, [
+        $member = Member::create(array_merge($memberData, [
             'user_id' => $user->id
         ]));
     }
