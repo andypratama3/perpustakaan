@@ -30,7 +30,6 @@ class Peminjaman extends Model
         $query->when($filters['search'] ?? false, function ($query, $search) {
             return $query->where(function ($query) use ($search) {
                 $query->where('no_peminjaman', 'like', '%' . $search . '%')
-                    ->orWhere('members_id', 'like', '%' . $search . '%')
                     ->orWhere('bukus_id', 'like', '%' . $search . '%')
                     ->orWhere('tgl_pinjam', 'like', '%' . $search . '%')
                     ->orWhere('tgl_kembali', 'like', '%' . $search . '%')
@@ -40,6 +39,8 @@ class Peminjaman extends Model
             });
         });
     }
+
+
 
     public function member()
     {

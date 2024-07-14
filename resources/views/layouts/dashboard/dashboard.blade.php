@@ -48,19 +48,28 @@
               <span class="hide-menu">Pengembalian</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href=".///" aria-expanded="false">
+              <a class="sidebar-link" href="{{ route('dashboard.pengembalian.index') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-login"></i>
                 </span>
                 <span class="hide-menu">Pengembalian</span>
               </a>
             </li>
+
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('dashboard.peminjaman.index') }}" aria-expanded="false">
                   <span>
                     <i class="ti ti-arrows-exchange"></i>
                   </span>
                   <span class="hide-menu">Peminjaman</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('dashboard.denda.index') }}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-report-money"></i>
+                  </span>
+                  <span class="hide-menu">Denda</span>
                 </a>
               </li>
             <li class="nav-small-cap">
@@ -147,7 +156,15 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">My Task</p>
                     </a>
-                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="btn btn-outline-primary mx-3 mt-2 d-block">
+                        Logout
+                        </a>
                   </div>
                 </div>
               </li>

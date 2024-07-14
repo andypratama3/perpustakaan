@@ -1,47 +1,94 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="en">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .background {
+            position: absolute;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            /* background: linear-gradient(to right, #fd81d6, #80dfff); */
+            background: radial-gradient(#80dfff, #ffaee5);
+            display: flex;
+            flex-grow: 1;
+            z-index: -1;
+            opacity: 0.35;
+        }
+    </style>
+</head>
+
+<body class="position-relative">
+    <!--  Body Wrapper -->
+    <div class="background">
+    </div>
+
+    <div class="page-wrapper" id="main-wrapper">
+        <!--  Main wrapper -->
+        <a href="{{ route('landing.index') }}" class="btn btn-outline-primary m-3 position-absolute">
+            <i class="ti ti-arrow-left"></i>
+            Kembali
+          </a>
+        <div class="body-wrapper position-relative">
+            <div class="container col-xxl-8 px-4 py-5">
+                <!-- Main content -->
+                <div class="w-100">
+                    <div class="container d-flex justify-content-center p-3">
+                        <div class="card col-12 col-md-5 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-5">Register</h5>
+                                <form action="{{ route('login') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <!-- Email -->
+                                    <div class="mb-2">
+                                        <label for="" class="form-label">Email</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Email Address" value="{{ old('email') }}"  />
+
+                                        @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="" class="form-label">Password</label>
+
+                                        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="password" value="{{ old('password') }}"  />
+
+                                        @error('password')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="d-grid col-12 mx-auto m-3">
+                                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                        <a href="{{ route('register') }}" class="btn btn-danger mt-2">Register</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+</body>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+</html>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+{{-- @endsection --}}

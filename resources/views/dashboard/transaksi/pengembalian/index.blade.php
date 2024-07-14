@@ -28,7 +28,7 @@
                                 </form>
                             </div>
                             <div>
-                                <a href="{{ route('dashboard.peminjaman.create') }}" class="btn btn-primary">
+                                <a href="{{ route('dashboard.pengembalian.create') }}" class="btn btn-primary">
                                     <i class="ti ti-plus"></i>
                                     Tambah Peminjaman
                                 </a>
@@ -43,13 +43,12 @@
                                 <th>No</th>
                                 <th>Nama Peminjam</th>
                                 <th>Judul Buku</th>
-                                <th>Jumlah</th>
                                 <th>Tanggal Peminjaman</th>
                                 <th>Tenggat</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                                 @if(Auth::user()->role == 'admin')
-                                <th>Konfirmasi / Batalkan</th>
+                                <th>Konfirmasi / Batalkan Pengembalian</th>
                                 @endif
                             </tr>
                         </thead>
@@ -57,20 +56,19 @@
                             @foreach ($peminjamans as $peminjaman)
                             <tr>
                                 <td>{{ ++$no }}</td>
-                                <td>{{ $peminjaman->member->name }}</td>
-                                <td>{{ $peminjaman->buku->name }}</td>
-                                <td>{{ $peminjaman->jumlah }}</td>
+                                <td>{{ $peminjaman->peminjaman->member->name }}</td>
+                                <td>{{ $peminjaman->peminjaman->buku->name }}</td>
                                 <td>{{ $peminjaman->tgl_pinjam }}</td>
                                 <td>{{ $peminjaman->tgl_kembali }}</td>
                                 <td>{{ $peminjaman->status }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.peminjaman.show', $peminjaman->id) }}"
+                                    <a href="{{ route('dashboard.pengembalian.show', $peminjaman->id) }}"
                                         class="btn btn-sm btn-info"><i class="ti ti-eye"></i></a>
-                                    <a href="{{ route('dashboard.peminjaman.edit', $peminjaman->id) }}"
+                                    <a href="{{ route('dashboard.pengembalian.edit', $peminjaman->id) }}"
                                         class="btn btn-sm btn-primary"><i class="ti ti-pencil"></i></a>
                                     <a href="#" class="btn btn-sm btn-danger btn-delete"
                                         data-id="{{ $peminjaman->id }}">
-                                        <form action="{{ route('dashboard.peminjaman.destroy', $peminjaman->id) }}"
+                                        <form action="{{ route('dashboard.pengembalian.destroy', $peminjaman->id) }}"
                                             method="post" id="delete-{{ $peminjaman->id }}" method="POST"
                                             class="d-inline">
                                             @csrf
@@ -83,11 +81,11 @@
                                 @if(Auth::user()->role == 'admin')
                                 <td>
                                     {{-- make button confimation --}}
-                                    @if ($peminjaman->status == 'pending')
-                                    <a href="{{ route('dashboard.peminjaman.konfirmasi', $peminjaman->id) }}"
+                                    @if ($peminjaman->status == 'Dikembalikan')
+                                    <a href="{{ route('dashboard.pengembalian.konfirmasi', $peminjaman->id) }}"
                                         class="btn btn-sm btn-success"><i class="ti ti-check"></i> Konfimasi</a>
                                     @else
-                                    <a href="{{ route('dashboard.peminjaman.konfirmasi', $peminjaman->id) }}"
+                                    <a href="{{ route('dashboard.pengembalian.konfirmasi', $peminjaman->id) }}"
                                         class="btn btn-warning btn-sm"><i class="ti ti-check"></i>Batalkan Konfimasi</a>
                                     @endif
                                 </td>

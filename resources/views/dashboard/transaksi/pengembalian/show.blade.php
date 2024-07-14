@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="w-100">
-            <a href="{{ route('dashboard.peminjaman.index') }}" class="btn btn-outline-primary mb-3">
+            <a href="{{ route('dashboard.member.index') }}" class="btn btn-outline-primary mb-3">
                 <i class="ti ti-arrow-left"></i>
                 Kembali
             </a>
@@ -24,15 +24,11 @@
                             </button>
                         </form> --}}
                         <div>
-                            @if($peminjaman->status == 'konfirmasi')
-                            <a href="{{ route('dashboard.peminjaman.pengembalian', $peminjaman->id) }}"
+                            <a href=""
                                 class="btn btn-primary w-100 ">
                                 <i class="ti ti-check"></i>
                                 Selesaikan pengembalian
                             </a>
-                            @else
-
-                            @endif
                         </div>
                     </div>
                 </div>
