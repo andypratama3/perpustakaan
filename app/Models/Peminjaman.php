@@ -44,11 +44,16 @@ class Peminjaman extends Model
 
     public function member()
     {
-        return $this->belongsTo(Member::class, 'members_id', 'id');
+        return $this->belongsTo(Member::class, 'members_id');
     }
 
     public function buku()
     {
-        return $this->belongsTo(Buku::class,'bukus_id', 'id');
+        return $this->belongsTo(Buku::class,'bukus_id');
+    }
+
+    public function denda()
+    {
+        return $this->hasOne(Denda::class, 'peminjamans_id');
     }
 }

@@ -72,6 +72,8 @@
                   <span class="hide-menu">Denda</span>
                 </a>
               </li>
+            @if(Auth::user()->role == 'admin')
+
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">Master</span>
@@ -108,6 +110,7 @@
                 <span class="hide-menu">Kategori</span>
               </a>
             </li>
+            @endif
 
           </ul>
         </nav>

@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
             'name' => 'Superadmin',
             'email' => 'superadmin@admin.com',
             'password' => bcrypt('superadmin'),
+            'role' => 'admin',
         ];
 
         $memberData = [

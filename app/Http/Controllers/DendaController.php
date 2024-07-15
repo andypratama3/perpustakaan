@@ -10,33 +10,28 @@ use Illuminate\Support\Facades\Auth;
 
 class DendaController extends Controller
 {
+
     public function index(Request $request)
     {
         $limit = 10;
         $query = Denda::orderBy('id', 'desc');
 
-        // Check if search parameter is provided
-        if ($request->search != null) {
-            // Filter based on search parameter
-            $query->filter(['search' => $request->search]);
+        // check member id
+        if (Auth::user()->role != 'admin') {
+            $member_id = Member::where('user_id', Auth::user()->id)->first()->id;
+            $peminjaman = Peminjaman::where('members_id', $member_id)->first();
 
-            // If user is not admin, filter further by member_id
-            if (Auth::user()->role != 'admin') {
-                $member_id = Member::where('user_id', Auth::user()->id)->first()->id;
-                $peminjaman = Peminjaman::where('members_id', $member_id)->first()->id;
-                // $query->where('peminjamans_id', $peminjaman->id);
-                $query = $query->where('peminjamans_id', $peminjaman);
+            if ($peminjaman != null) {
+                $query = $query->where('peminjamans_id', $peminjaman->id);
+            }else {
+                $query = $query->where('peminjamans_id', null);
+            }
+        }else {
 
-            }
-        } else {
-            //show all data when role admin
-            if (Auth::user()->role == 'admin') {
-                $query = $query;
-            } else {
-                $member_id = Member::where('user_id', Auth::user()->id)->first()->id;
-                $peminjaman = Peminjaman::where('members_id', $member_id)->first()->id;
-                $query = $query->where('peminjamans_id', $peminjaman);
-            }
+        }
+
+        if($request->search != null) {
+            $query->where('no_peminjaman', 'like', '%' . $request->search . '%');
         }
 
         // Paginate the results
@@ -46,5 +41,19 @@ class DendaController extends Controller
         $no = $limit * ($peminjamans->currentPage() - 1);
 
         return view('dashboard.transaksi.denda.index', compact('peminjamans', 'no', 'count'));
+    }
+
+    public function konfirmasi($id)
+    {
+        $denda = Denda::find($id);
+
+        if($denda->status == 'paid') {
+            $denda->status = 'unpaid';
+        }else {
+            $denda->status = 'paid';
+        }
+        $denda->save();
+
+        return redirect()->route('dashboard.denda.index')->with('success','Denda Berhasil Di Update');
     }
 }

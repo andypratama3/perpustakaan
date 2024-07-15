@@ -30,6 +30,8 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     //denda
     Route::resource('denda', DendaController::class, ['names' => 'dashboard.denda']);
+    Route::get('/dendas/konfirmasi/{id}', [DendaController::class, 'konfirmasi'])->name('dashboard.denda.konfirmasi');
+    // pengembalian
     Route::resource('pengembalian', PengembalianController::class, ['names' => 'dashboard.pengembalian']);
     Route::get('/pengembalians/kembalikan/{id}', [PengembalianController::class, 'pengembalian'])->name('dashboard.pengembalian.pengembalian');
     Route::get('/pengembalians/konfirmasi/{id}', [PengembalianController::class, 'konfirmasi'])->name('dashboard.pengembalian.konfirmasi');

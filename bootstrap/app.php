@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withSchedule(function (Schedule $schedule) {
-        $schedule->command('calculate:denda')->everySecond();
+        $schedule->command('calculate:denda')->daily();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

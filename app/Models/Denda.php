@@ -20,9 +20,9 @@ class Denda extends Model
         'total_denda',
         'lama_terlambat',
     ];
-
     public function peminjaman()
     {
-        return $this->belongsTo(Peminjaman::class, 'peminjamans_id', 'id');
+        return $this->belongsTo(Peminjaman::class, 'peminjamans_id');
     }
+
 }

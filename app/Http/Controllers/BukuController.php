@@ -9,6 +9,7 @@ use App\Http\Requests\dashboard\BukuRequest;
 
 class BukuController extends Controller
 {
+    
     public function index()
     {
         $limit = 10;
