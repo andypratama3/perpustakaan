@@ -18,6 +18,9 @@ class MemberController extends Controller
     {
         $limit = 10;
         $members = Member::orderBy('name', 'asc')->paginate($limit);
+        if(request()->has('search')) {
+            $members = Member::where('name', 'like', '%' . request('search') . '%')->orderBy('name', 'asc')->paginate($limit);
+        }
         $count = $members->count();
         $no = $limit * ($members->currentPage() - 1);
 

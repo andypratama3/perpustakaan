@@ -8,7 +8,33 @@
           </div>
         <div class="card">
             <div class="card-body">
-                <h4>Data buku <a href="{{ route('dashboard.buku.create') }}" class="btn btn-primary btn-sm float-end"><i class="ti ti-plus"></i>Tambah buku</a></h4>
+                <div class="row mb-2">
+                    <div class="col-12 col-lg-5">
+                        <h5 class="card-title fw-semibold mb-4">Data Buku</h5>
+                    </div>
+                    <div class="col-12 col-lg-7">
+                        <div class="d-flex gap-2 justify-content-md-end">
+                            <div>
+                                <form action="{{ route('dashboard.buku.index') }}" method="get">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="search" value=""
+                                            placeholder="Cari buku" aria-label="Cari peminjaman"
+                                            aria-describedby="searchButton">
+                                        <button class="btn btn-outline-secondary" type="submit"
+                                            id="searchButton">Cari</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <a href="{{ route('dashboard.buku.create') }}" class="btn btn-primary">
+                                    <i class="ti ti-plus"></i>
+                                    Tambah Buku
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover mt-4 text-center">

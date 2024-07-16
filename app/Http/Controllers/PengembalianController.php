@@ -83,9 +83,9 @@ class PengembalianController extends Controller
         $pengembalian = Pengembalian::find($id);
         if($pengembalian->status == 'Dikembalikan'){
             $pengembalian->status = 'Konfirmasi';
-
         }else{
             $pengembalian->status = 'Dikembalikan';
+            $peminjaman = Peminjaman::where('no_peminjaman', $pengembalian->no_peminjaman)->first();
         }
         $pengembalian->update();
         return redirect()->route('dashboard.pengembalian.index')->with('success','Berhasil Di Konfirmasi');

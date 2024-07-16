@@ -9,11 +9,14 @@ use App\Http\Requests\dashboard\BukuRequest;
 
 class BukuController extends Controller
 {
-    
+
     public function index()
     {
         $limit = 10;
         $bukus = Buku::orderBy('name', 'asc')->paginate($limit);
+        if(request()->has('search')) {
+            $bukus = Buku::where('name', 'like', '%' . request('search') . '%')->orderBy('name', 'asc')->paginate($limit);  
+        }
         $count = $bukus->count();
         $no = $limit * ($bukus->currentPage() - 1);
 

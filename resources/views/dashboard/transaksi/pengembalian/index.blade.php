@@ -58,7 +58,7 @@
                                 <td>{{ ++$no }}</td>
                                 <td>{{ $peminjaman->peminjaman->member->name }}</td>
                                 <td>{{ $peminjaman->peminjaman->buku->name }}</td>
-                                <td>{{ $peminjaman->tgl_pinjam }}</td>
+                                <td>{{ $peminjaman->peminjaman->tgl_pinjam }}</td>
                                 <td>{{ $peminjaman->tgl_kembali }}</td>
                                 <td>{{ $peminjaman->status }}</td>
                                 <td>
@@ -77,7 +77,7 @@
                                         </form>
                                     </a>
                                 </td>
-                                
+
                                 @if(Auth::user()->role == 'admin')
                                 <td>
                                     {{-- make button confimation --}}

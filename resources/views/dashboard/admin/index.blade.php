@@ -8,7 +8,32 @@
           </div>
         <div class="card">
             <div class="card-body">
-                <h4>Data Users </h4>
+                <div class="row mb-2">
+                    <div class="col-12 col-lg-5">
+                        <h5 class="card-title fw-semibold mb-4">Data User</h5>
+                    </div>
+                    <div class="col-12 col-lg-7">
+                        <div class="d-flex gap-2 justify-content-md-end">
+                            <div>
+                                <form action="{{ route('dashboard.admin.index') }}" method="get">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="search" value=""
+                                            placeholder="Cari admin" aria-label="Cari peminjaman"
+                                            aria-describedby="searchButton">
+                                        <button class="btn btn-outline-secondary" type="submit"
+                                            id="searchButton">Cari</button>
+                                    </div>
+                                </form>
+                            </div>
+                            {{-- <div>
+                                <a href="{{ route('dashboard.admin.create') }}" class="btn btn-primary">
+                                    <i class="ti ti-plus"></i>
+                                    Tambah User
+                                </a>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover ">

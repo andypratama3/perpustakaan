@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use App\Models\Buku;
+use App\Models\Denda;
 use App\Models\Member;
 use App\Models\Peminjaman;
 use Illuminate\Support\Str;
@@ -30,57 +31,67 @@ class PeminjamanController extends Controller
 
             // If user is not admin, filter further by member_id
             if (Auth::user()->role != 'admin') {
-                $member_id = Member::where('user_id', Auth::user()->id)->first()->id;
+                $member_id = Member::where('user_id', Auth::user()->id)->value('id');
                 $query->where('members_id', $member_id);
             }
         } else {
-            //show all data when role admin
-            if (Auth::user()->role == 'admin') {
-                $query = $query;
-            } else {
-                $member_id = Member::where('user_id', Auth::user()->id)->first()->id;
-                $query = $query->where('members_id', $member_id);
+            // Show all data when role admin
+            if (Auth::user()->role != 'admin') {
+                $member_id = Member::where('user_id', Auth::user()->id)->value('id');
+                $query->where('members_id', $member_id);
             }
-
         }
 
-        // Paginate the results
-        $peminjamans = $query->paginate($limit);
+        // Check if there are any peminjaman with unpaid denda
+        $hasUnpaidDenda = false;
+        if (isset($member_id)) {
+            $hasUnpaidDenda = Denda::where('members_id', $member_id)->where('status', 'unpaid')->exists();
+        }
 
+        // Get the list of peminjamans
+        $peminjamans = $query->paginate($limit);
         $count = $peminjamans->count();
         $no = $limit * ($peminjamans->currentPage() - 1);
 
-        return view('dashboard.transaksi.peminjaman.index', compact('peminjamans', 'no', 'count'));
+        return view('dashboard.transaksi.peminjaman.index', compact('no', 'count', 'peminjamans', 'hasUnpaidDenda'));
     }
 
 
     public function create(Request $request)
     {
-        if(Auth::user()->role != 'admin') {
+        if (Auth::user()->role != 'admin') {
             $users = Member::where('user_id', Auth::user()->id)->get();
-        }else {
+        } else {
             $users = Member::all();
         }
 
         $bukus = Buku::orderBy('name')->take(5)->get();
-        if($request->search) {
-            $bukus = Buku::where('name', 'like', '%'.$request->search.'%')->take(5)->get();
+        if ($request->search) {
+            $bukus = Buku::where('name', 'like', '%' . $request->search . '%')->take(5)->get();
         }
 
-        return view('dashboard.transaksi.peminjaman.create', compact('users','bukus'));
+        // Check if there are any unpaid dendas associated with peminjaman or members_id
+        $hasUnpaidDenda = false;
+        if (Auth::user()->role != 'admin') {
+            $member_id = Member::where('user_id', Auth::user()->id)->value('id');
+            $hasUnpaidDenda = Denda::whereHas('peminjaman', function ($query) use ($member_id) {
+                $query->where('members_id', $member_id)->where('status', 'unpaid');
+            })->exists();
+        }
+
+        return view('dashboard.transaksi.peminjaman.create', compact('users', 'bukus', 'hasUnpaidDenda'));
     }
 
     public function store(PeminjamanRequest $request)
     {
-        if($request->members_id)
-        {
+        if ($request->members_id) {
             $members_id = $request->members_id;
-        }else {
+        } else {
             $members_id = Member::where('user_id', Auth::user()->id)->first()->id;
         }
 
         $peminjaman = Peminjaman::create([
-            'no_peminjaman' => Str::random(10),
+            'no_peminjaman' => rand(),
             'members_id' => $members_id,
             'bukus_id' => $request->bukus_id,
             'tgl_pinjam' => $request->tgl_pinjam,
@@ -96,7 +107,7 @@ class PeminjamanController extends Controller
 
     public function show(Peminjaman $peminjaman)
     {
-         // Get the dates from $peminjaman object
+        // Get the dates from $peminjaman object
         $tgl_pinjam = new DateTime($peminjaman->tgl_pinjam);
         $tgl_kembali = new DateTime($peminjaman->tgl_kembali);
 
@@ -111,15 +122,15 @@ class PeminjamanController extends Controller
 
     public function edit(Peminjaman $peminjaman, Request $request)
     {
-        if(Auth::user()->role != 'admin') {
+        if (Auth::user()->role != 'admin') {
             $users = Member::where('user_id', Auth::user()->id)->get();
-        }else {
+        } else {
             $users = Member::all();
         }
 
         $bukus = Buku::orderBy('name')->take(5)->get();
-        if($request->search) {
-            $bukus = Buku::where('name', 'like', '%'.$request->search.'%')->take(5)->get();
+        if ($request->search) {
+            $bukus = Buku::where('name', 'like', '%' . $request->search . '%')->take(5)->get();
         }
 
         return view('dashboard.transaksi.peminjaman.edit', compact('peminjaman', 'users', 'bukus'));
@@ -127,10 +138,9 @@ class PeminjamanController extends Controller
 
     public function update(PeminjamanRequest $request, Peminjaman $peminjaman)
     {
-        if($request->members_id)
-        {
+        if ($request->members_id) {
             $members_id = $request->members_id;
-        }else {
+        } else {
             $members_id = Member::where('user_id', Auth::user()->id)->first()->id;
         }
 
@@ -144,7 +154,7 @@ class PeminjamanController extends Controller
         ]);
 
         $buku = Buku::find($request->bukus_id);
-        if($request->jumlah != $peminjaman->jumlah) {
+        if ($request->jumlah != $peminjaman->jumlah) {
             $buku->increment('stok', $peminjaman->jumlah - $request->jumlah);
         }
 
@@ -168,7 +178,7 @@ class PeminjamanController extends Controller
 
     public function searchBuku(Request $request)
     {
-        $bukus = Buku::where('name', 'like', '%'.$request->search.'%')->take(5)->get();
+        $bukus = Buku::where('name', 'like', '%' . $request->search . '%')->take(5)->get();
 
         return response()->json($bukus);
     }
@@ -182,16 +192,13 @@ class PeminjamanController extends Controller
     public function konfirmasi($id)
     {
         $peminjaman = Peminjaman::find($id);
-        if($peminjaman->status == 'pending') {
+        if ($peminjaman->status == 'pending') {
             $peminjaman->status = 'konfirmasi';
-        }else {
+        } else {
             $peminjaman->status = 'pending';
         }
         $peminjaman->update();
 
         return redirect()->route('dashboard.peminjaman.index')->with('success', 'Berhasil Mengkonfirmasi Peminjaman');
     }
-
-
-
 }

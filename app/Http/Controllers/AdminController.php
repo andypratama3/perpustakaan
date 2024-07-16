@@ -6,12 +6,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
+
 class AdminController extends Controller
 {
     public function index()
     {
         $limit = 10;
         $users = User::orderBy('name', 'asc')->paginate($limit);
+        if(request()->has('search')) {
+            $users = User::where('name', 'like', '%' . request('search') . '%')->orderBy('name', 'asc')->paginate($limit);
+        }
         $count = $users->count();
         $no = $limit * ($users->currentPage() - 1);
 

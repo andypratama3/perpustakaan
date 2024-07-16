@@ -16,21 +16,17 @@ class DendaController extends Controller
         $limit = 10;
         $query = Denda::orderBy('id', 'desc');
 
-        // check member id
+        // Check member id
         if (Auth::user()->role != 'admin') {
-            $member_id = Member::where('user_id', Auth::user()->id)->first()->id;
+            $member_id = Member::where('user_id', Auth::user()->id)->first();
             $peminjaman = Peminjaman::where('members_id', $member_id)->first();
-
-            if ($peminjaman != null) {
-                $query = $query->where('peminjamans_id', $peminjaman->id);
-            }else {
-                $query = $query->where('peminjamans_id', null);
+            if ($peminjaman) {
+                $query->where('peminjamans_id', $peminjaman->id);
             }
-        }else {
-
         }
 
-        if($request->search != null) {
+        // Apply search filter
+        if ($request->search) {
             $query->where('no_peminjaman', 'like', '%' . $request->search . '%');
         }
 

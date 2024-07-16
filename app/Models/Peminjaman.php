@@ -40,8 +40,6 @@ class Peminjaman extends Model
         });
     }
 
-
-
     public function member()
     {
         return $this->belongsTo(Member::class, 'members_id');
@@ -55,5 +53,15 @@ class Peminjaman extends Model
     public function denda()
     {
         return $this->hasOne(Denda::class, 'peminjamans_id');
+    }
+
+    /**
+     * Determine if this peminjaman has any unpaid denda.
+     *
+     * @return bool
+     */
+    public function hasUnpaidDenda()
+    {
+        return $this->denda()->where('status', 'unpaid')->exists();
     }
 }

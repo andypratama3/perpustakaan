@@ -10,19 +10,19 @@ class Denda extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-
     protected $table = 'dendas';
 
     protected $fillable = [
         'no_peminjaman',
         'peminjamans_id',
+        'members_id',
         'status',
         'total_denda',
         'lama_terlambat',
     ];
+
     public function peminjaman()
     {
         return $this->belongsTo(Peminjaman::class, 'peminjamans_id');
     }
-
 }

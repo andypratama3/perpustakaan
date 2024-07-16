@@ -28,10 +28,12 @@
                                 </form>
                             </div>
                             <div>
-                                <a href="{{ route('dashboard.peminjaman.create') }}" class="btn btn-primary">
-                                    <i class="ti ti-plus"></i>
-                                    Tambah Peminjaman
-                                </a>
+                                @if (!$hasUnpaidDenda)
+                                <a href="{{ route('dashboard.peminjaman.create') }}" class="btn btn-primary">Create Peminjaman</a>
+                            @else
+                                {{-- <button class="btn btn-primary" disabled>Create Peminjaman</button>
+                                <p class="text-danger">You have unpaid denda associated with peminjaman. Resolve them before creating a new peminjaman.</p> --}}
+                            @endif
                             </div>
                         </div>
                     </div>
@@ -50,6 +52,8 @@
                                 <th>Aksi</th>
                                 @if(Auth::user()->role == 'admin')
                                 <th>Konfirmasi / Batalkan</th>
+                                @else
+                                <th>Pengembalian Buku</th>
                                 @endif
                             </tr>
                         </thead>
@@ -91,7 +95,20 @@
                                         class="btn btn-warning btn-sm"><i class="ti ti-check"></i>Batalkan Konfimasi</a>
                                     @endif
                                 </td>
+                                @else
+                                <td>
+                                    @if($peminjaman->status == 'konfirmasi')
+                                        <a href="{{ route('dashboard.pengembalian.pengembalian', $peminjaman->id) }}"
+                                            class="btn btn-primary w-100 btn-sm">
+                                            <i class="ti ti-check"></i>
+                                            Selesaikan pengembalian
+                                        </a>
+                                        @else
+
+                                        @endif
+                                </td>
                                 @endif
+
                             </tr>
                             @endforeach
                         </tbody>

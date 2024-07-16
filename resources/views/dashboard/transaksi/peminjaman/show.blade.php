@@ -25,7 +25,7 @@
                         </form> --}}
                         <div>
                             @if($peminjaman->status == 'konfirmasi')
-                            <a href="{{ route('dashboard.peminjaman.pengembalian', $peminjaman->id) }}"
+                            <a href="{{ route('dashboard.pengembalian.pengembalian', $peminjaman->id) }}"
                                 class="btn btn-primary w-100 ">
                                 <i class="ti ti-check"></i>
                                 Selesaikan pengembalian

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('total_denda');
             $table->string('lama_terlambat');
             $table->foreignId('peminjamans_id')->constrained('peminjamans')->onDelete('cascade');
+            $table->foreignId('members_id')->constrained('members')->onDelete('cascade');
             $table->timestamps();
         });
     }

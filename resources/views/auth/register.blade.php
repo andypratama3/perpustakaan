@@ -34,10 +34,10 @@
 
     <div class="page-wrapper" id="main-wrapper">
         <!--  Main wrapper -->
-        <a href="{{ route('landing.index') }}" class="btn btn-outline-primary m-3 position-absolute">
-            <i class="ti ti-arrow-left"></i>
+        <a href="{{ route('landing.index') }}" class="btn btn-outline-primary m-3 ">
+            {{-- <i class="ti ti-arrow-left"></i> --}}
             Kembali
-          </a>
+        </a>
         <div class="body-wrapper position-relative">
             <div class="container col-xxl-8 px-4 py-5">
                 <!-- Main content -->
