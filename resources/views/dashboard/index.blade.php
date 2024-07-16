@@ -2,6 +2,7 @@
 @section('title', 'Dashboard')
 @section('content')
     @if(Auth::user()->role == 'admin')
+    <!-- Admin Dashboard -->
     <!-- Row 1 -->
     <div class="row">
         <!-- BUKU -->
@@ -26,9 +27,6 @@
                 </div>
             </a>
         </div>
-    </div>
-
-    <div class="row">
         <!-- MEMBER -->
         <div class="col-sm-6">
             <a href="{{ route('dashboard.member.index') }}">
@@ -85,9 +83,9 @@
         </div>
     </div>
 
+    <!-- Overview Chart -->
     <div class="row">
-        <!-- Overview Chart -->
-        <div class="col-lg-8 d-flex align-items-strech">
+        <div class="col-lg-8 d-flex align-items-stretch">
             <div class="card w-100">
                 <div class="card-body">
                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
@@ -167,6 +165,7 @@
         </div>
     </div>
     @else
+    <!-- Non-admin Dashboard -->
     <div class="row">
         <div class="col-sm-6">
             <a href="{{ route('dashboard.peminjaman.index') }}">

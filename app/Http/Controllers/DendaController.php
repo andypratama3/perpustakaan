@@ -14,15 +14,15 @@ class DendaController extends Controller
     public function index(Request $request)
     {
         $limit = 10;
+
+        // $peminjaman = Peminjaman::count();
         $query = Denda::orderBy('id', 'desc');
 
         // Check member id
         if (Auth::user()->role != 'admin') {
             $member_id = Member::where('user_id', Auth::user()->id)->first();
             $peminjaman = Peminjaman::where('members_id', $member_id)->first();
-            if ($peminjaman) {
-                $query->where('peminjamans_id', $peminjaman->id);
-            }
+            $query->where('members_id', $member_id->id);
         }
 
         // Apply search filter

@@ -48,6 +48,7 @@
                                 <th>Jumlah</th>
                                 <th>Tanggal Peminjaman</th>
                                 <th>Tenggat</th>
+                                <th>Jumlah Peminjaman</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                                 @if(Auth::user()->role == 'admin')
@@ -66,6 +67,7 @@
                                 <td>{{ $peminjaman->jumlah }}</td>
                                 <td>{{ $peminjaman->tgl_pinjam }}</td>
                                 <td>{{ $peminjaman->tgl_kembali }}</td>
+                                <td>{{ $peminjaman->jumlah }}</td>
                                 <td>{{ $peminjaman->status }}</td>
                                 <td>
                                     <a href="{{ route('dashboard.peminjaman.show', $peminjaman->id) }}"

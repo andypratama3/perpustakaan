@@ -22,7 +22,9 @@ class PeminjamanController extends Controller
     public function index(Request $request)
     {
         $limit = 10;
-        $query = Peminjaman::orderBy('id', 'desc');
+        $query = Peminjaman::orderBy('jumlah', 'desc');
+        // order by count peminjaman by range count peminjaman
+
 
         // Check if search parameter is provided
         if ($request->search != null) {

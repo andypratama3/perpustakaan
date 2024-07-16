@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\Kategori;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -17,38 +18,63 @@ class DashboardController extends Controller
         // Count entities
         $buku = Buku::count();
         $members = Member::count();
-        $peminjamans = Peminjaman::count();
         $dendas = Denda::count();
         $kategori = Kategori::count();
 
-        // Count overdue fines
+        // Initialize variables for non-admin specific counts
+        $newMembers = null;
+        $peminjamanToday = null;
+        $pengembalianToday = null;
+        $jatuhTempoToday = null;
 
-        // Get current date
-        $today = Carbon::today();
+        // Check if user is not admin
+        if (Auth::user()->role != 'admin') {
+            // Get current user's member ID
+            $memberId = Auth::user()->member_id;
 
-        // Count new members created today
-        $newMembers = Member::whereDate('created_at', $today)->count();
+            // Count new members created today
+            $newMembers = Member::whereDate('created_at', Carbon::today())->count();
 
-        // Count total peminjaman today
-        $peminjamanToday = Peminjaman::whereDate('created_at', $today)->count();
+            // Count total peminjaman today
+            $peminjamanToday = Peminjaman::where('members_id', $memberId)
+                ->whereDate('created_at', Carbon::today())
+                ->count();
 
-        // Count total pengembalian today
-        $pengembalianToday = Peminjaman::whereDate('tgl_kembali', $today)->where('status', 'konfirmasi')->count();
+            // Count total pengembalian today
+            $pengembalianToday = Peminjaman::where('members_id', $memberId)
+                ->whereDate('tgl_kembali', Carbon::today())
+                ->where('status', 'konfirmasi')
+                ->count();
 
-        // Count total jatuh tempo (overdue) today
-        $jatuhTempoToday = Peminjaman::whereDate('tgl_kembali', '<', $today)->where('status', 'konfirmasi')->count();
+            // Count total jatuh tempo (overdue) today
+            $jatuhTempoToday = Peminjaman::where('members_id', $memberId)
+                ->whereDate('tgl_kembali', '<', Carbon::today())
+                ->where('status', 'konfirmasi')
+                ->count();
+
+            // Fetch only peminjaman data associated with the current member
+            $peminjamans = Peminjaman::where('members_id', $memberId)->count();
+
+            // If you want to return null when there are no peminjaman records for the member
+            // if ($peminjamans->isEmpty()) {
+            //     return null;
+            // }
+        } else {
+            // User is admin, fetch all peminjaman data
+            $peminjamans = Peminjaman::count();
+        }
 
         // Calculate date ranges for overdue fines and arrears
-        $sevenDaysAgo = $today->copy()->subDays(7);
-        $lastMonthStart = $today->copy()->startOfMonth()->subMonth()->format('Y-m-d');
-        $lastMonthEnd = $today->copy()->startOfMonth()->subDay()->format('Y-m-d');
+        $sevenDaysAgo = Carbon::today()->subDays(7);
+        $lastMonthStart = Carbon::today()->startOfMonth()->subMonth()->format('Y-m-d');
+        $lastMonthEnd = Carbon::today()->startOfMonth()->subDay()->format('Y-m-d');
 
         // Total Pendapatan Denda in the last 7 days
         $totalDenda = Denda::whereDate('created_at', '>=', $sevenDaysAgo)->sum('total_denda');
 
         // Total Tunggakan from May 31, 2024, to July 16, 2024
         $totalTunggakan = Peminjaman::where('status', 'konfirmasi')
-            ->whereDate('tgl_kembali', '<', $today)
+            ->whereDate('tgl_kembali', '<', Carbon::today())
             ->whereDate('tgl_kembali', '>=', '2024-05-31')
             ->sum('denda');
 
@@ -66,7 +92,6 @@ class DashboardController extends Controller
         if ($totalTunggakanLastMonth != 0) {
             $percentageChange = (($totalTunggakan - $totalTunggakanLastMonth) / $totalTunggakanLastMonth) * 100;
         }
-        // askoaso
         // Format percentage change
         $percentageChangeFormatted = number_format($percentageChange, 2) . '%';
 

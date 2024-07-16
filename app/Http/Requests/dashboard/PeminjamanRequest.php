@@ -25,7 +25,8 @@ class PeminjamanRequest extends FormRequest
             'bukus_id' => 'required|exists:bukus,id',
             'tgl_pinjam' => 'required|date',
             'tgl_kembali' => 'required|date',
-            'jumlah' => 'required|string',
+            'jumlah' => 'required|numeric|max:3',
+
         ];
     }
 }

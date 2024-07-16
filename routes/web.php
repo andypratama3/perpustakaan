@@ -47,7 +47,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     //laporan
     Route::get('/laporan', [LaporanController::class, 'index'])->name('dashboard.laporan.index');
-    Route::get('/laporan/unduh', [LaporanController::class, 'unduh'])->name('dashboard.laporan.unduh');
+    Route::post('/laporan/unduh', [LaporanController::class, 'unduh'])->name('dashboard.laporan.unduh');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

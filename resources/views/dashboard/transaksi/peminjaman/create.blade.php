@@ -144,7 +144,7 @@
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="jumlah">Jumlah</label>
-                            <input type="number" name="jumlah" id="jumlah" class="form-control mt-2 @error('jumlah') is-invalid @enderror" value="{{ old('jumlah') }}">
+                            <input type="number" name="jumlah" maxlength="3" id="jumlah" class="form-control mt-2 @error('jumlah') is-invalid @enderror" value="{{ old('jumlah') }}">
                             @error('jumlah')
                             <div class="invalid-feedback">
                                 {{ $message }}
