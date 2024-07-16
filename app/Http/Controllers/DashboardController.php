@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $kategori = Kategori::count();
 
         // Count overdue fines
-        
+
         // Get current date
         $today = Carbon::today();
 
@@ -66,7 +66,7 @@ class DashboardController extends Controller
         if ($totalTunggakanLastMonth != 0) {
             $percentageChange = (($totalTunggakan - $totalTunggakanLastMonth) / $totalTunggakanLastMonth) * 100;
         }
-
+        // askoaso
         // Format percentage change
         $percentageChangeFormatted = number_format($percentageChange, 2) . '%';
 
